@@ -1,16 +1,24 @@
 package za.co.quikle.lexio.navigation
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 sealed class Screen(val route: String) {
     data object Splash : Screen("splash")
     data object Onboarding : Screen("onboarding")
     data object Home : Screen("home")
-    data object Chat : Screen("chat?conversationId={conversationId}") {
-        fun createRoute(conversationId: String? = null): String {
-            return if (conversationId != null) {
-                "chat?conversationId=$conversationId"
-            } else {
-                "chat"
+    data object Chat : Screen("chat?conversationId={conversationId}&prefillQuery={prefillQuery}") {
+        fun createRoute(conversationId: String? = null, prefillQuery: String? = null): String {
+            val base = "chat"
+            val params = mutableListOf<String>()
+            if (conversationId != null) {
+                params.add("conversationId=$conversationId")
             }
+            if (prefillQuery != null) {
+                val encoded = URLEncoder.encode(prefillQuery, StandardCharsets.UTF_8.toString())
+                params.add("prefillQuery=$encoded")
+            }
+            return if (params.isEmpty()) base else "$base?${params.joinToString("&")}"
         }
     }
     data object Scenario : Screen("scenario")
