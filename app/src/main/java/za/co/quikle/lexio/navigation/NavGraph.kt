@@ -16,6 +16,8 @@ import za.co.quikle.lexio.ui.screens.profile.ProfileScreen
 import za.co.quikle.lexio.ui.screens.scenario.ScenarioScreen
 import za.co.quikle.lexio.ui.screens.settings.SettingsScreen
 import za.co.quikle.lexio.ui.screens.splash.SplashScreen
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun NavGraph(
@@ -62,11 +64,28 @@ fun NavGraph(
                     type = NavType.StringType
                     nullable = true
                     defaultValue = null
+                },
+                navArgument("prefillQuery") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 }
             )
         ) { backStackEntry ->
             val conversationId = backStackEntry.arguments?.getString("conversationId")
-            ChatScreen(navController = navController, conversationId = conversationId)
+            val rawPrefill = backStackEntry.arguments?.getString("prefillQuery")
+            val prefillQuery = rawPrefill?.let {
+                try {
+                    URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
+                } catch (_: Exception) {
+                    it
+                }
+            }
+            ChatScreen(
+                navController = navController,
+                conversationId = conversationId,
+                prefillQuery = prefillQuery
+            )
         }
 
         composable(Screen.Scenario.route) {
