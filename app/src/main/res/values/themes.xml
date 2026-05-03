@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Lexio" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- Splash Screen Theme (Android 12+) -->
+    <style name="Theme.Lexio.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary_green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Lexio</item>
+    </style>
+
+    <!-- Main App Theme -->
+    <style name="Theme.Lexio" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorSecondary">@color/secondary_gold</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
